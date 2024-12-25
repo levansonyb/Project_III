@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class Board : MonoBehaviour
+public class Board : MonoBehaviour
 {
     public GameObject CellObject;
 
