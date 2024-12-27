@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: hk
   PunLogging: 1
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -40,6 +40,12 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_CreateBoard
+  - RPC_MovePiece
+  - RPC_EndGame
+  - MovePiece
+  - UpdatePiecePosition
+  - SomeRPCMethod
+  - RPC_ChangeTurn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1

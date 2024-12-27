@@ -31,6 +31,7 @@ public class PieceManager : MonoBehaviour
     public new AudioSource audio; // Điều khiển âm thanh
 
     public ClockManager clockManager; // Quản lý thời gian của trò chơi
+    public ClockManagerOnline clockManagerOnline; // Quản lý thời gian của trò chơi online
 
     public GameObject piecePrefab; // Prefab của các quân cờ
     public TMP_Text result; // Hiển thị kết quả trò chơi
@@ -42,7 +43,8 @@ public class PieceManager : MonoBehaviour
     public static float whiteTime = 60;
 
     public static bool IAmode = true; // Biến kiểm tra xem có đang chơi với AI hay không
-    public static bool isIAWithe = false;
+    public static bool isAIWhite = false;
+    public static bool Online = true;
     public IA stockfish = null;
     [HideInInspector]
     public bool IATurn = false;
@@ -153,17 +155,17 @@ public class PieceManager : MonoBehaviour
         if (IAmode)
         {
             stockfish.Setup();
-            if (isIAWithe)
+            if (isAIWhite)
             {
                 StartCoroutine(showIAMoveCoroutine());
-                clockManager.displayBlack.text = "Người";
-                clockManager.displayWhite.text = "Máy" + IA.IA_Game_Level[IA.level];
+                clockManager.displayBlack.text = "Player";
+                clockManager.displayWhite.text = "Computer " + IA.IA_Game_Level[IA.level];
             }
             else
             {
                 SetInteractive(whitePieces, true);
-                clockManager.displayWhite.text = "Người";
-                clockManager.displayBlack.text = "Máy" + IA.IA_Game_Level[IA.level];
+                clockManager.displayWhite.text = "Player";
+                clockManager.displayBlack.text = "Computer " + IA.IA_Game_Level[IA.level];
             }
         }
         else
@@ -217,18 +219,23 @@ public class PieceManager : MonoBehaviour
         {
             stockfish.Close();
             stockfish.Setup();
-            if (isIAWithe)
+            if (isAIWhite)
             {
                 StartCoroutine(showIAMoveCoroutine());
-                clockManager.displayBlack.text = "Người";
-                clockManager.displayWhite.text = "Máy cấp độ " + IA.IA_Game_Level[IA.level];
+                clockManager.displayBlack.text = "Player";
+                clockManager.displayWhite.text = "Computer " + IA.IA_Game_Level[IA.level];
             }
             else
             {
                 SetInteractive(whitePieces, true);
-                clockManager.displayWhite.text = "Người";
-                clockManager.displayBlack.text = "Máy cấp độ " + IA.IA_Game_Level[IA.level];
+                clockManager.displayWhite.text = "Player";
+                clockManager.displayBlack.text = "Computer " + IA.IA_Game_Level[IA.level];
             }
+        }
+        else if (Online)
+        {
+            clockManager.displayBlack.text = "Player 1";
+            clockManager.displayWhite.text = "Player 2";
         }
         else
         {
@@ -356,12 +363,12 @@ public class PieceManager : MonoBehaviour
 
         if (GameState.INGAME == gameState)
         {
-            if (isIAWithe)
+            if (isAIWhite)
                 SetInteractive(blackPieces, true);
-            else
+            else{
                 SetInteractive(whitePieces, true);
-
-            clockManager.setTurn(!isIAWithe);
+            }          
+            clockManager.setTurn(!isAIWhite);
         }
     }
 

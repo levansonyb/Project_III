@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
 {
     public TMP_Dropdown ddTime;
     public TMP_Dropdown ddLevel;
-    public TMP_Dropdown ddSide;
+    public TMP_Dropdown ddIASide;
 
     // Chế độ chơi online
     public void PlayGameOnline()
@@ -34,8 +34,13 @@ public class MainMenu : MonoBehaviour
             PieceManager.whiteTime = 3600;
             PieceManager.blackTime = 3600;
         }
+        if (ddIASide.value == 0)
+            PieceManager.isAIWhite = false;
+        if (ddIASide.value == 1)
+            PieceManager.isAIWhite = true;
 
         PieceManager.IAmode = false;
+        PieceManager.Online = true;
         SceneManager.LoadScene(2); // Game
     }
 
@@ -64,6 +69,7 @@ public class MainMenu : MonoBehaviour
         }
 
         PieceManager.IAmode = false;
+        PieceManager.Online = false;
         SceneManager.LoadScene(1); // Game
     }
 
@@ -72,10 +78,10 @@ public class MainMenu : MonoBehaviour
     {
         PieceManager.IAmode = true;
 
-        if (ddSide.value == 0)
-            PieceManager.isIAWithe = false;
-        if (ddSide.value == 1)
-            PieceManager.isIAWithe = true;
+        if (ddIASide.value == 0)
+            PieceManager.isAIWhite = false;
+        if (ddIASide.value == 1)
+            PieceManager.isAIWhite = true;
 
         IA.level = IA.IA_Level[ddLevel.value];
 

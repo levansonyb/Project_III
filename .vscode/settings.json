@@ -52,5 +52,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Chess-main.sln"
+    "dotnet.defaultSolution": "2D-Chess-Unity.sln"
 }

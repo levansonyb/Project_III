@@ -30,4 +30,19 @@ public class GameManager : MonoBehaviour
     {
         pieceManager.ResetGame();
     }
+
+    // Xoay bàn cờ
+    public void ReverseBoard()
+    {
+        board.transform.localRotation *= Quaternion.Euler(180, 180, 0);
+        foreach (List<Cell> row in board.allCells)
+        {
+            foreach (Cell boardCell in row)
+            {
+                if (boardCell.currentPiece != null)
+                    boardCell.currentPiece.PlaceInit(boardCell);
+            }
+        }
+    }
+    
 }

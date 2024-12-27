@@ -407,4 +407,10 @@ public abstract class BasePiece : EventTrigger
             pieceManager.ShowResult();
         }
     }
+
+    internal void Setup(bool v, GameManagerOnline gameManagerOnline)
+    {
+        throw new NotImplementedException();
+    }
+
 }

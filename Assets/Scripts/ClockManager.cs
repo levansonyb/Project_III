@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,11 +11,14 @@ public class ClockManager : MonoBehaviour
     [HideInInspector]
     public bool launched = false; // Xác định xem đồng hồ đã được bắt đầu chưa
 
-    private Timer clockWhite;
-    private Timer clockBlack;
+    public TMP_Text displayWhiteLab; // Hiển thị thời gian cho người chơi trắng
+    public TMP_Text displayBlackLab; // Hiển thị thời gian cho người chơi đen
 
-    public TMP_Text displayWhite;
-    public TMP_Text displayBlack;
+    private Timer clockWhite; // Đồng hồ cho người chơi trắng
+    private Timer clockBlack; // Đồng hồ cho người chơi đen
+
+    public TMP_Text displayWhite; // Hiển thị thời gian cho người chơi trắng
+    public TMP_Text displayBlack; // Hiển thị thời gian cho người chơi đen
 
     public GameObject highlightClockW;
     public GameObject highlightClockB;
@@ -31,6 +35,9 @@ public class ClockManager : MonoBehaviour
         launched = false;
         clockWhite = new Timer();
         clockBlack = new Timer();
+
+        displayWhiteLab.text = "White";
+        displayBlackLab.text = "Black";
 
         clockWhite.Setup(whiteTime, displayWhite);
         clockBlack.Setup(blackTime, displayBlack);
@@ -51,7 +58,7 @@ public class ClockManager : MonoBehaviour
     }
 
     // cập nhật thời gian còn lại của người chơi hiện tại và xử lý hết thời gian
-    void Update()
+    public void Update()
     {
         if (launched)
         {
@@ -101,4 +108,40 @@ public class ClockManager : MonoBehaviour
         highlightClockW.SetActive(isWhiteTurn);
         highlightClockB.SetActive(!isWhiteTurn);
     }
+
+    public void Text()
+    {
+        displayWhiteLab.text = "White";
+        displayBlackLab.text = "Black";
+    }
+
+    public void ReverseClocks()
+    {
+        // Xoay các thành phần đồng hồ của người chơi trắng và đen
+        var tempPos = displayWhite.transform.position;
+        displayWhite.transform.position = displayBlack.transform.position;
+        displayBlack.transform.position = tempPos;
+
+        var temp = displayWhiteLab.transform.position;
+        displayWhiteLab.transform.position = displayBlackLab.transform.position;
+        displayBlackLab.transform.position = temp;
+
+        var tempHighlight = highlightClockW.activeSelf;
+        highlightClockW.SetActive(highlightClockB.activeSelf);
+        highlightClockB.SetActive(tempHighlight);
+
+        // Thay đổi màu sắc của đồng hồ khi xoay
+        var tempColor = highlightClockW.GetComponent<Image>().color;
+        highlightClockW.GetComponent<Image>().color = highlightClockB.GetComponent<Image>().color;
+        highlightClockB.GetComponent<Image>().color = tempColor;
+
+
+    }
+
+
+    internal void Setup(int v1, int v2, GameManagerOnline gameManagerOnline)
+    {
+        throw new NotImplementedException();
+    }
+
 }
