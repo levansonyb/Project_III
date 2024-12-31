@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using TMPro;
 
 public class MainMenu : MonoBehaviour
@@ -12,81 +9,37 @@ public class MainMenu : MonoBehaviour
     public TMP_Dropdown ddIASide;
     public TMP_Dropdown ddOnlineSide;
 
+    private readonly int[] timeOptions = { 60, 300, 900, 3600 };
+
     // Chế độ chơi online
-    public void PlayGameOnline()
+    public void PlayOnline()
     {
-        if (ddTime.value == 0)
-        {
-            PieceManager.whiteTime = 60;
-            PieceManager.blackTime = 60;
-        }
-        if (ddTime.value == 1)
-        {
-            PieceManager.whiteTime = 300;
-            PieceManager.blackTime = 300;
-        }
-        if (ddTime.value == 2)
-        {
-            PieceManager.whiteTime = 900;
-            PieceManager.blackTime = 900;
-        }
-        if (ddTime.value == 3)
-        {
-            PieceManager.whiteTime = 3600;
-            PieceManager.blackTime = 3600;
-        }
-        if (ddOnlineSide.value == 0)
-            PieceManager.player1 = true;
-        if (ddOnlineSide.value == 1)
-            PieceManager.player1 = false;
+        SetGameTime(ddTime.value);
+        PieceManager.player1 = (ddOnlineSide.value == 0);
 
         PieceManager.IAmode = false;
         PieceManager.Online = true;
-        SceneManager.LoadScene(2); // Game
+        LoadScene(2);
     }
 
     // Chế độ chơi 2 người
     public void PlayGame()
     {
-        if (ddTime.value == 0)
-        {
-            PieceManager.whiteTime = 60;
-            PieceManager.blackTime = 60;
-        }
-        if (ddTime.value == 1)
-        {
-            PieceManager.whiteTime = 300;
-            PieceManager.blackTime = 300;
-        }
-        if (ddTime.value == 2)
-        {
-            PieceManager.whiteTime = 900;
-            PieceManager.blackTime = 900;
-        }
-        if (ddTime.value == 3)
-        {
-            PieceManager.whiteTime = 3600;
-            PieceManager.blackTime = 3600;
-        }
+        SetGameTime(ddTime.value);
 
         PieceManager.IAmode = false;
         PieceManager.Online = false;
-        SceneManager.LoadScene(1); // Game
+        LoadScene(1);
     }
 
     // Chế độ chơi với máy
     public void PlayIA()
     {
         PieceManager.IAmode = true;
-
-        if (ddIASide.value == 0)
-            PieceManager.isAIWhite = false;
-        if (ddIASide.value == 1)
-            PieceManager.isAIWhite = true;
+        PieceManager.isAIWhite = (ddIASide.value == 1);
 
         IA.level = IA.IA_Level[ddLevel.value];
-
-        SceneManager.LoadScene(1); // Game
+        LoadScene(1);
     }
 
     // Thoát ứng dụng
@@ -94,5 +47,25 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Quit");
         Application.Quit();
+    }
+
+    // Cài đặt thời gian cho trò chơi
+    private void SetGameTime(int index)
+    {
+        if (index >= 0 && index < timeOptions.Length)
+        {
+            PieceManager.whiteTime = timeOptions[index];
+            PieceManager.blackTime = timeOptions[index];
+        }
+        else
+        {
+            Debug.LogError("Invalid time option selected.");
+        }
+    }
+
+    // Tải scene
+    private void LoadScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(sceneIndex);
     }
 }

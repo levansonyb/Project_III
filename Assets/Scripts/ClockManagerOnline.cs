@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
 
 public class ClockManagerOnline : MonoBehaviourPun
 {
@@ -12,13 +10,17 @@ public class ClockManagerOnline : MonoBehaviourPun
     public bool launched = false;
     public TMP_Text displayWhite;
     public TMP_Text displayBlack;
+
     private Timer clockWhite;
     private Timer clockBlack;
+
     public GameObject highlightClockW;
     public GameObject highlightClockB;
+
     private PieceManager pm = null;
     private bool isWhiteTurn = true;
 
+    // Cài đặt đồng hồ cho trò chơi online
     public void Setup(float whiteTime, float blackTime, bool isWhite, PieceManager newPm)
     {
         pm = newPm;
@@ -33,27 +35,38 @@ public class ClockManagerOnline : MonoBehaviourPun
         highlightClockW.SetActive(true);
         highlightClockB.SetActive(false);
 
-        highlightClockW.GetComponent<Image>().color = new Color(0.36f, 0.68f, 0.27f, 1);
-        highlightClockB.GetComponent<Image>().color = new Color(0.36f, 0.68f, 0.27f, 1);
+        ApplyClockColor();
 
         if (!isWhite)
         {
-            // Đổi chiều hiển thị đồng hồ cho người chơi đen
             SwapClockDisplay();
         }
     }
 
+    // Đổi màu và vị trí hiển thị đồng hồ cho người chơi đen
     private void SwapClockDisplay()
     {
-        var tempText = displayWhite.text;
-        displayWhite.text = displayBlack.text;
-        displayBlack.text = tempText;
-
-        var tempColor = highlightClockW.GetComponent<Image>().color;
-        highlightClockW.GetComponent<Image>().color = highlightClockB.GetComponent<Image>().color;
-        highlightClockB.GetComponent<Image>().color = tempColor;
+        SwapText(displayWhite, displayBlack);
+        SwapColor(highlightClockW, highlightClockB);
     }
 
+    // Đổi text của 2 đồng hồ
+    private void SwapText(TMP_Text text1, TMP_Text text2)
+    {
+        string tempText = text1.text;
+        text1.text = text2.text;
+        text2.text = tempText;
+    }
+
+    // Đổi màu của 2 highlight
+    private void SwapColor(GameObject obj1, GameObject obj2)
+    {
+        Color tempColor = obj1.GetComponent<Image>().color;
+        obj1.GetComponent<Image>().color = obj2.GetComponent<Image>().color;
+        obj2.GetComponent<Image>().color = tempColor;
+    }
+
+    // Bắt đầu đếm giờ
     public void StartClocks()
     {
         clockWhite.Start();
@@ -61,6 +74,7 @@ public class ClockManagerOnline : MonoBehaviourPun
         launched = true;
     }
 
+    // Cập nhật thời gian cho mỗi lượt
     public void UpdateClocks()
     {
         if (launched)
@@ -74,6 +88,7 @@ public class ClockManagerOnline : MonoBehaviourPun
         }
     }
 
+    // Kiểm tra hết thời gian
     private void CheckTimeOut()
     {
         if (clockBlack.runOut)
@@ -82,7 +97,7 @@ public class ClockManagerOnline : MonoBehaviourPun
             pm.ShowResult();
             StopClocks();
         }
-        if (clockWhite.runOut)
+        else if (clockWhite.runOut)
         {
             pm.gameState = GameState.BLACK_WIN;
             pm.ShowResult();
@@ -90,6 +105,7 @@ public class ClockManagerOnline : MonoBehaviourPun
         }
     }
 
+    // Dừng đồng hồ
     public void StopClocks()
     {
         clockWhite.Stop();
@@ -97,6 +113,7 @@ public class ClockManagerOnline : MonoBehaviourPun
         launched = false;
     }
 
+    // Chuyển lượt chơi và đồng bộ qua mạng
     public void ChangeTurn()
     {
         isWhiteTurn = !isWhiteTurn;
@@ -110,33 +127,22 @@ public class ClockManagerOnline : MonoBehaviourPun
         ToggleClockHighlight();
     }
 
+    // Đổi trạng thái hiển thị của đồng hồ theo lượt chơi
     private void ToggleClockHighlight()
     {
         highlightClockW.SetActive(isWhiteTurn);
         highlightClockB.SetActive(!isWhiteTurn);
     }
 
+    // Xoay đồng hồ cho người chơi và cập nhật trạng thái
     public void RotateClocks()
     {
-        // Xoay các thành phần đồng hồ của người chơi trắng và đen
-        var tempPos = displayWhite.transform.position;
-        displayWhite.transform.position = displayBlack.transform.position;
-        displayBlack.transform.position = tempPos;
+        SwapText(displayWhite, displayBlack);
+        SwapColor(highlightClockW, highlightClockB);
 
-        var tempHighlight = highlightClockW.activeSelf;
-        highlightClockW.SetActive(highlightClockB.activeSelf);
-        highlightClockB.SetActive(tempHighlight);
-
-        // Thay đổi màu sắc của đồng hồ khi xoay
-        var tempColor = highlightClockW.GetComponent<Image>().color;
-        highlightClockW.GetComponent<Image>().color = highlightClockB.GetComponent<Image>().color;
-        highlightClockB.GetComponent<Image>().color = tempColor;
-
-        // Cập nhật trạng thái lượt chơi (nếu cần)
         isWhiteTurn = !isWhiteTurn;
         ToggleClockHighlight();
 
-        // Cập nhật đồng hồ
         if (isWhiteTurn)
         {
             clockWhite.Start();
@@ -149,8 +155,9 @@ public class ClockManagerOnline : MonoBehaviourPun
         }
     }
 
-    internal void Setup(int v1, int v2, GameManagerOnline gameManagerOnline)
+    private void ApplyClockColor()
     {
-        throw new NotImplementedException();
+        highlightClockW.GetComponent<Image>().color = new Color(0.36f, 0.68f, 0.27f, 1);
+        highlightClockB.GetComponent<Image>().color = new Color(0.36f, 0.68f, 0.27f, 1);
     }
 }

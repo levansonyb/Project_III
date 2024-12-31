@@ -156,39 +156,53 @@ public class PieceManager : MonoBehaviour
 
         if (Online)
         {
-            if (player1)
-            {
-                SetInteractive(whitePieces, true);
-                clockManager.displayWhite.text = "Player 1";
-                clockManager.displayBlack.text = "Player 2";
-            }
-            else
-            {
-                SetInteractive(whitePieces, true);
-            }
+            ConfigureOnlineMode();
         }
-
-        if (IAmode)
+        else if (IAmode)
         {
             stockfish.Setup();
-            if (isAIWhite)
-            {
-                StartCoroutine(showIAMoveCoroutine());
-                clockManager.displayBlack.text = "Player";
-                clockManager.displayWhite.text = "Computer " + IA.IA_Game_Level[IA.level];
-                clockManager.ReverseClocks();
-                gameManager.ReverseBoard();
-            }
-            else
-            {
-                SetInteractive(whitePieces, true);
-                clockManager.displayWhite.text = "Player";
-                clockManager.displayBlack.text = "Computer " + IA.IA_Game_Level[IA.level];
-            }
+            ConfigureAIMode();
         }
         else
         {
             SetInteractive(whitePieces, true);
+        }
+    }
+
+    private void ConfigureOnlineMode()
+    {
+        stockfish.Setup();
+        if (player1)
+        {
+            SetInteractive(whitePieces, true);
+            clockManager.displayWhite.text = "Player 1";
+            clockManager.displayBlack.text = "Player 2";
+        }
+        else
+        {
+            SetInteractive(blackPieces, true);
+            clockManager.displayWhite.text = "Player 1";
+            clockManager.displayBlack.text = "Player 2";
+        }
+    }
+
+    private void ConfigureAIMode()
+    {
+        stockfish.Close();
+        stockfish.Setup();
+        if (isAIWhite)
+        {
+            StartCoroutine(showIAMoveCoroutine());
+            clockManager.displayBlack.text = "Player";
+            clockManager.displayWhite.text = "Computer" + IA.IA_Game_Level[IA.level];
+            clockManager.ReverseClocks();
+            gameManager.ReverseBoard();
+        }
+        else
+        {
+            SetInteractive(whitePieces, true);
+            clockManager.displayWhite.text = "Player";
+            clockManager.displayBlack.text = "Computer" + IA.IA_Game_Level[IA.level];
         }
     }
 
@@ -233,29 +247,13 @@ public class PieceManager : MonoBehaviour
 
         checkVerificationInProcess = false;
 
-        if (IAmode)
+        if (Online)
         {
-            stockfish.Close();
-            stockfish.Setup();
-            if (isAIWhite)
-            {
-                StartCoroutine(showIAMoveCoroutine());
-                clockManager.displayBlack.text = "Player";
-                clockManager.displayWhite.text = "Computer " + IA.IA_Game_Level[IA.level];
-                clockManager.ReverseClocks();
-                gameManager.ReverseBoard();
-            }
-            else
-            {
-                SetInteractive(whitePieces, true);
-                clockManager.displayWhite.text = "Player";
-                clockManager.displayBlack.text = "Computer " + IA.IA_Game_Level[IA.level];
-            }
+            ConfigureOnlineMode();
         }
-        else if (Online)
+        else if (IAmode)
         {
-            clockManager.displayBlack.text = "Player 1";
-            clockManager.displayWhite.text = "Player 2";
+            ConfigureAIMode();
         }
         else
         {
@@ -462,20 +460,20 @@ public class PieceManager : MonoBehaviour
         yield return new WaitForSeconds((float)2.1);
         if (gameState == GameState.BLACK_WIN)
         {
-            result.text = "Đen thắng!";
+            result.text = "Back win!";
             clockManager.highlightClockB.SetActive(true);
             clockManager.highlightClockB.GetComponent<Image>().color = new Color(1, (float)0.6816, 0, 1);
         }
         if (gameState == GameState.WHITE_WIN)
         {
-            result.text = "Trắng thắng!";
+            result.text = "White win!";
             clockManager.highlightClockW.SetActive(true);
             clockManager.highlightClockW.GetComponent<Image>().color = new Color(1, (float)0.6816, 0, 1);
 
         }
         if (gameState == GameState.PAT)
         {
-            result.text = "Hòa!";
+            result.text = "Draw!";
         }
         result.enabled = true;
     }

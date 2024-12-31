@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Board : MonoBehaviour
+public abstract class Board : MonoBehaviour
 {
     public GameObject CellObject;
 
@@ -18,7 +18,7 @@ public class Board : MonoBehaviour
     public int Row { get => row; set => row = value; }
     public int Column { get => column; set => column = value; }
 
-    public void Create()
+    public virtual void Create()
     {
         float board_width = GetComponent<RectTransform>().rect.width;
         float board_height = GetComponent<RectTransform>().rect.height;

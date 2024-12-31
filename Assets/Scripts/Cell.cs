@@ -32,7 +32,7 @@ public class Cell : MonoBehaviour
     public Pawn enPassant; // Trạng thái "bắt tốt qua đường"
 
     // Khởi tạo ô với vị trí và bàn cờ mới
-    public void Setup(Vector2Int newBoardPosition, Board newBoard)
+    public virtual void Setup(Vector2Int newBoardPosition, Board newBoard)
     {
         boardPosition = newBoardPosition;
         board = newBoard;
@@ -44,7 +44,7 @@ public class Cell : MonoBehaviour
     }
 
     // Loại bỏ quân cờ hiện tại khỏi ô
-    public void RemovePiece()
+    public virtual void RemovePiece()
     {
         if (currentPiece != null)
         {
@@ -57,7 +57,7 @@ public class Cell : MonoBehaviour
     }
 
     // xác định trạng thái của ô so với quân cờ đang kiểm tra
-    public CellState GetState(BasePiece checkingPiece)
+    public virtual CellState GetState(BasePiece checkingPiece)
     {
         // check
         if (!checkingPiece.GetPieceManager().checkVerificationInProcess)
