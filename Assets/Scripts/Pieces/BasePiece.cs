@@ -72,7 +72,7 @@ public abstract class BasePiece : EventTrigger
         currentCell.currentPiece = this;
 
         transform.position = newCell.transform.position;
-        gameObject.SetActive(true); 
+        gameObject.SetActive(true);
     }
 
     private void CreateCellPath(int xDirection, int yDirection, int movement)
@@ -205,7 +205,7 @@ public abstract class BasePiece : EventTrigger
         // Nếu nước đi không hợp lệ, trả quân cờ về vị trí cũ, ngược lại thực hiện di chuyển quân cờ.
         if (!targetCell || pieceManager.gameState != GameState.INGAME)
         {
-            transform.position = currentCell.transform.position; 
+            transform.position = currentCell.transform.position;
         }
         else
         {

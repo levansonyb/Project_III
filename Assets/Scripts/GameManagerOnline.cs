@@ -10,6 +10,7 @@ public class GameManagerOnline : MonoBehaviourPunCallbacks
     public PieceManager pieceManager;    // Quản lý quân cờ
     public ClockManagerOnline clockManagerOnline; // Quản lý đồng hồ đếm giờ
     public PlayerManager playerManager; // Quản lý người chơi
+    public GameManager gameManager; // Quản lý trò chơi
 
     private bool isWhite; // Người chơi là trắng hay đen
 

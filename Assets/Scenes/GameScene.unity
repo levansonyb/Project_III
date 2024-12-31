@@ -612,6 +612,11 @@ PrefabInstance:
       objectReference: {fileID: 1437230579}
     - target: {fileID: 3392181566955825990, guid: f6e7330a4627ede45bcae3fbd3fffd96,
         type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 97449260}
+    - target: {fileID: 3392181566955825990, guid: f6e7330a4627ede45bcae3fbd3fffd96,
+        type: 3}
       propertyPath: clockManager
       value: 
       objectReference: {fileID: 1993742417}

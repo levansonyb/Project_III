@@ -31,6 +31,7 @@ public class PieceManager : MonoBehaviour
     public new AudioSource audio; // Điều khiển âm thanh
 
     public ClockManager clockManager; // Quản lý thời gian của trò chơi
+    public GameManager gameManager; // Quản lý trò chơi
     public ClockManagerOnline clockManagerOnline; // Quản lý thời gian của trò chơi online
 
     public GameObject piecePrefab; // Prefab của các quân cờ
@@ -43,8 +44,9 @@ public class PieceManager : MonoBehaviour
     public static float whiteTime = 60;
 
     public static bool IAmode = true; // Biến kiểm tra xem có đang chơi với AI hay không
-    public static bool isAIWhite = false;
+    public static bool isAIWhite = true;
     public static bool Online = true;
+    public static bool player1 = true;
     public IA stockfish = null;
     [HideInInspector]
     public bool IATurn = false;
@@ -152,6 +154,20 @@ public class PieceManager : MonoBehaviour
         checkVerificationInProcess = false;
         clockManager.Setup(whiteTime, blackTime, this);
 
+        if (Online)
+        {
+            if (player1)
+            {
+                SetInteractive(whitePieces, true);
+                clockManager.displayWhite.text = "Player 1";
+                clockManager.displayBlack.text = "Player 2";
+            }
+            else
+            {
+                SetInteractive(whitePieces, true);
+            }
+        }
+
         if (IAmode)
         {
             stockfish.Setup();
@@ -160,6 +176,8 @@ public class PieceManager : MonoBehaviour
                 StartCoroutine(showIAMoveCoroutine());
                 clockManager.displayBlack.text = "Player";
                 clockManager.displayWhite.text = "Computer " + IA.IA_Game_Level[IA.level];
+                clockManager.ReverseClocks();
+                gameManager.ReverseBoard();
             }
             else
             {
@@ -224,6 +242,8 @@ public class PieceManager : MonoBehaviour
                 StartCoroutine(showIAMoveCoroutine());
                 clockManager.displayBlack.text = "Player";
                 clockManager.displayWhite.text = "Computer " + IA.IA_Game_Level[IA.level];
+                clockManager.ReverseClocks();
+                gameManager.ReverseBoard();
             }
             else
             {
@@ -365,9 +385,10 @@ public class PieceManager : MonoBehaviour
         {
             if (isAIWhite)
                 SetInteractive(blackPieces, true);
-            else{
+            else
+            {
                 SetInteractive(whitePieces, true);
-            }          
+            }
             clockManager.setTurn(!isAIWhite);
         }
     }
